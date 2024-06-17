@@ -1,6 +1,21 @@
 import { createContext, useContext, useReducer } from 'react';
 
-type Status = "idle" | "fetching" | "ready"
+export interface Question {
+    category: string,
+    type: "multiple" | "boolean",
+    difficulty: "easy" | "medium" | "hard",
+    question: string,
+    correct_answer: string,
+    incorrect_answers: string[]
+}
+
+export interface QuestionsResponse {
+    response_code: number,
+    results: Question[]
+}
+
+
+type Status = "idle" | "fetching" | "ready" | "error";
 
 interface QuizContext {
     state: QuizState,
