@@ -13,6 +13,8 @@ function App() {
   async function fetchQuestion() {
     try {
       dispatch({ type: 'setStatus', payload: "fetching" });
+      dispatch({ type: 'setUserAnswer', payload: null });
+
       const response = await fetch(API_URL);
       let data: QuestionsResponse = await (response.json());
 

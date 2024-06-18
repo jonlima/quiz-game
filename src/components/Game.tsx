@@ -9,6 +9,16 @@ function Game() {
 
     const { state, dispatch } = useQuiz();
 
+    function handleSubmit () {
+        dispatch({ type: 'setStatus', payload: 'idle'});
+
+        if (state.userAnswer == state.question?.correct_answer) {
+            dispatch({ type: 'setScore', payload: 'correct' });
+        } else {
+            dispatch({ type: 'setScore', payload: 'incorrect' });
+        }
+    }
+
     return (
         <>
             <div className="container game-screen">
@@ -30,7 +40,10 @@ function Game() {
 
                 {
                     state.gameStatus == "answered" &&
-                    <Result />
+                    <>
+                        <Result />
+                        <button onClick={handleSubmit}>Next Question</button>
+                    </>
                }
             </div>
             
