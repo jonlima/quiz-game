@@ -3,19 +3,26 @@ import AnswerOption from './AnswerOption.tsx';
 import Result from './Result.tsx';
 import { useQuiz } from '../QuizContext.tsx';
 import { decode } from 'html-entities';
+// @ts-ignore
+import confetti from "https://cdn.skypack.dev/canvas-confetti";
 
 
 function Game() {
 
     const { state, dispatch } = useQuiz();
+    let wonAudio = new Audio('./sounds/won.wav');
+    let lostAudio = new Audio('./sounds/lost.wav');
 
     function handleSubmit () {
         dispatch({ type: 'setStatus', payload: 'idle'});
 
         if (state.userAnswer == state.question?.correct_answer) {
             dispatch({ type: 'setScore', payload: 'correct' });
+            wonAudio.play();
+            confetti();
         } else {
             dispatch({ type: 'setScore', payload: 'incorrect' });
+            lostAudio.play();
         }
     }
 
@@ -33,7 +40,7 @@ function Game() {
                 </div>
                {
                     state.userAnswer && state.gameStatus != "answered" &&
-                    <button onClick={() => { dispatch({type: 'setStatus', payload: "answered"}) }}>
+                    <button onClick={handleSubmit}>
                         Submit
                     </button>
                }
@@ -42,7 +49,7 @@ function Game() {
                     state.gameStatus == "answered" &&
                     <>
                         <Result />
-                        <button onClick={handleSubmit}>Next Question</button>
+                        <button onClick={()=>{dispatch({type: "setStatus", payload: "idle"})}}>Next Question</button>
                     </>
                }
             </div>
